@@ -28,17 +28,17 @@ public class ClassTestRun {
 
             for (Method method : testMethods) {
                 Object instance = ReflectionHelper.instantiate(clazz);
-                beforeMethods.stream().map(Method::getName)
-                        .forEach(x -> ReflectionHelper.callMethod(instance, x));
-
                 try {
+                    beforeMethods.stream().map(Method::getName)
+                            .forEach(x -> ReflectionHelper.callMethod(instance, x));
                     ReflectionHelper.callMethod(instance, method.getName());
                     pass++;
                 } catch (Exception ex) {
                     fail++;
+                } finally {
+                    afterMethods.stream().map(Method::getName)
+                            .forEach(x -> ReflectionHelper.callMethod(instance, x));
                 }
-                afterMethods.stream().map(Method::getName)
-                        .forEach(x -> ReflectionHelper.callMethod(instance, x));
             }
 
             System.out.println("Всего пройдено тестов: " + (pass + fail));
