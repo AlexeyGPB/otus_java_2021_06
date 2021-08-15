@@ -1,0 +1,32 @@
+1)
+256m - 39 sec
+
+2048m- 23 sec
+
+1024m- 23 sec
+
+512m - 26 sec
+
+768m - 23 sec
+
+640m- 26 sec
+
+694m -25 sec
+
+731m- 24 sec
+
+750m- 24 sec
+
+759m- 24 sec
+
+764m- 23 sec
+
+Recommended heap space - 764m
+2)
+Change Integer to int:
+764m- 5 sec,
+256m- 8 sec
+3)
+Move data:
+764m- 2 sec,
+256m- 2 sec
