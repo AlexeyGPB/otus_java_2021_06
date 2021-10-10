@@ -7,6 +7,7 @@ import org.junit.jupiter.api.io.TempDir;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -18,9 +19,9 @@ class ProcessorTest {
     //Надо реализовать методы классов и убедиться, что тест проходит
 
     @Test
-    @Disabled // Эту аннотацию надо убрать
+
     @DisplayName("Из файла читается json, обрабатывается, результат сериализуется в строку")
-    void processingTest(@TempDir Path tempDir) throws IOException {
+    void processingTest(@TempDir Path tempDir) throws IOException, URISyntaxException {
         System.out.println(tempDir);
 
         //given

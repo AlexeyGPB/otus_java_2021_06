@@ -2,9 +2,11 @@ package ru.otus.dataprocessor;
 
 import ru.otus.model.Measurement;
 
+import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.List;
 
 public interface Loader {
 
-    List<Measurement> load();
+    List<Measurement> load() throws URISyntaxException, IOException;
 }
