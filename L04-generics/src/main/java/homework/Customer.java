@@ -13,6 +13,12 @@ public class Customer {
         this.scores = scores;
     }
 
+    public Customer(Customer customer) {
+        this.id = customer.id;
+        this.name = customer.name;
+        this.scores = customer.scores;
+    }
+
     public long getId() {
         return id;
     }
@@ -50,15 +56,16 @@ public class Customer {
         Customer customer = (Customer) o;
 
         if (id != customer.id) return false;
-        if (scores != customer.scores) return false;
-        return name != null ? name.equals(customer.name) : customer.name == null;
+        return true;
+        // if (scores != customer.scores) return false;
+        // return name != null ? name.equals(customer.name) : customer.name == null;
     }
 
     @Override
     public int hashCode() {
         int result = (int) (id ^ (id >>> 32));
-        result = 31 * result + (name != null ? name.hashCode() : 0);
-        result = 31 * result + (int) (scores ^ (scores >>> 32));
+        // result = 31 * result + (name != null ? name.hashCode() : 0);
+        // result = 31 * result + (int) (scores ^ (scores >>> 32));
         return result;
     }
 }
