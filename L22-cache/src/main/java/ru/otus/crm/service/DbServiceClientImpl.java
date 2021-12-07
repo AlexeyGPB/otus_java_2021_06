@@ -27,12 +27,15 @@ public class DbServiceClientImpl implements DBServiceClient {
     public Client saveClient(Client client) {
         return transactionManager.doInTransaction(session -> {
             var clientCloned = client.clone();
-            if (client.getId() == null) {
-                clientDataTemplate.insert(session, clientCloned);
+            String clientId = client.getId();
+            if (clientId == null) {
+                clientId = clientDataTemplate.insert(session, clientCloned);
+                putToCache(clientId, clientCloned);
                 log.info("created client: {}", clientCloned);
                 return clientCloned;
             }
             clientDataTemplate.update(session, clientCloned);
+            putToCache(clientId, client);
             log.info("updated client: {}", clientCloned);
             return clientCloned;
         });
@@ -52,16 +55,6 @@ public class DbServiceClientImpl implements DBServiceClient {
         return clientOptional;
     }
 
-    private void fillInCache(Client client) {
-        myCache.put(String.valueOf(client.getId()), client);
-        myCache.addListener(new HwListener<String, Client>() {
-            @Override
-            public void notify(String key, Client value, String action) {
-                log.info("key:{}, value:{}, action: {}", key, value, action);
-            }
-        });
-    }
-
     @Override
     public List<Client> findAll() {
         return transactionManager.doInTransaction(session -> {
@@ -78,5 +71,19 @@ public class DbServiceClientImpl implements DBServiceClient {
             log.info("Client: {}", clientList);
             return clientList;
         });
+    }
+
+    private void fillInCache(Client client) {
+        myCache.put(String.valueOf(client.getId()), client);
+        myCache.addListener(new HwListener<String, Client>() {
+            @Override
+            public void notify(String key, Client value, String action) {
+                log.info("key:{}, value:{}, action: {}", key, value, action);
+            }
+        });
+    }
+
+    private void putToCache(String id, Client client) {
+        Optional.ofNullable(myCache).ifPresent(myCache -> myCache.put(id, client));
     }
 }

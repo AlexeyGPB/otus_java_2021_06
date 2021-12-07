@@ -10,7 +10,7 @@ public interface DataTemplate<T> {
 
     List<T> findAll(Session session);
 
-    void insert(Session session, T object);
+    String insert(Session session, T object);
 
     void update(Session session, T object);
 }
