@@ -15,7 +15,7 @@ public class Client implements Cloneable {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(name = "id")
-    private String id;
+    private Long id;
 
     @Column(name = "name")
     private String name;
@@ -28,7 +28,7 @@ public class Client implements Cloneable {
         this.name = name;
     }
 
-    public Client(String id, String name) {
+    public Client(Long id, String name) {
         this.id = id;
         this.name = name;
     }
@@ -38,11 +38,11 @@ public class Client implements Cloneable {
         return new Client(this.id, this.name);
     }
 
-    public String getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

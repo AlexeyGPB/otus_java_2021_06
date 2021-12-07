@@ -24,9 +24,8 @@ public class DataTemplateHibernate<T> implements DataTemplate<T> {
     }
 
     @Override
-    public String insert(Session session, T object) {
+    public void insert(Session session, T object) {
         session.persist(object);
-        return null;
     }
 
     @Override

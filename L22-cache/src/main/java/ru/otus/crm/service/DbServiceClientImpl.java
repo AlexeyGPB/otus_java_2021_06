@@ -27,15 +27,14 @@ public class DbServiceClientImpl implements DBServiceClient {
     public Client saveClient(Client client) {
         return transactionManager.doInTransaction(session -> {
             var clientCloned = client.clone();
-            String clientId = client.getId();
-            if (clientId == null) {
-                clientId = clientDataTemplate.insert(session, clientCloned);
-                putToCache(clientId, clientCloned);
+            if (client.getId() == null) {
+                clientDataTemplate.insert(session, clientCloned);
+                fillInCache(clientCloned);
                 log.info("created client: {}", clientCloned);
                 return clientCloned;
             }
             clientDataTemplate.update(session, clientCloned);
-            putToCache(clientId, client);
+            fillInCache(clientCloned);
             log.info("updated client: {}", clientCloned);
             return clientCloned;
         });
@@ -81,9 +80,5 @@ public class DbServiceClientImpl implements DBServiceClient {
                 log.info("key:{}, value:{}, action: {}", key, value, action);
             }
         });
-    }
-
-    private void putToCache(String id, Client client) {
-        Optional.ofNullable(myCache).ifPresent(myCache -> myCache.put(id, client));
     }
 }
