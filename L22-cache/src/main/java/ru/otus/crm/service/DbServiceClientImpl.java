@@ -29,10 +29,12 @@ public class DbServiceClientImpl implements DBServiceClient {
             var clientCloned = client.clone();
             if (client.getId() == null) {
                 clientDataTemplate.insert(session, clientCloned);
+                fillInCache(clientCloned);
                 log.info("created client: {}", clientCloned);
                 return clientCloned;
             }
             clientDataTemplate.update(session, clientCloned);
+            fillInCache(clientCloned);
             log.info("updated client: {}", clientCloned);
             return clientCloned;
         });
