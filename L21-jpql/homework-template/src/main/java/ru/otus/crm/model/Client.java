@@ -1,15 +1,13 @@
 package ru.otus.crm.model;
 
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Entity
-@Table(name = "client")
+@Table(name = "clients")
 public class Client implements Cloneable {
 
     @Id
@@ -19,6 +17,13 @@ public class Client implements Cloneable {
 
     @Column(name = "name")
     private String name;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "address_id")
+    private Address address;
+
+    @OneToMany(mappedBy = "client", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
+    private List<Phone> phones= new ArrayList<>();
 
     public Client() {
     }
@@ -35,9 +40,19 @@ public class Client implements Cloneable {
 
     @Override
     public Client clone() {
-        return new Client(this.id, this.name);
+        Client clonedClient = new Client(this.id, this.name);
+        if (this.address != null) {
+            Address newAddress = this.address.clone();
+            clonedClient.setAddress(newAddress);
+        }
+        List<Phone> clonedPhones = phones.stream().map(p -> {
+            Phone clonedPhone = p.clone();
+            clonedPhone.setClient(clonedClient);
+            return clonedPhone;
+        }).collect(Collectors.toList());
+        clonedClient.setPhones(clonedPhones);
+        return clonedClient;
     }
-
     public Long getId() {
         return id;
     }
@@ -52,6 +67,22 @@ public class Client implements Cloneable {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public List<Phone> getPhones() {
+        return phones;
+    }
+
+    public void setPhones(List<Phone> phones) {
+        this.phones = phones;
+    }
+
+    public Address getAddress() {
+        return address;
+    }
+
+    public void setAddress(Address address) {
+        this.address = address;
     }
 
     @Override
